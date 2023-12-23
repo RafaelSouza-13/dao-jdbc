@@ -3,7 +3,7 @@ package interfaces;
 import java.util.List;
 import model.Seller;
 
-public interface SellerDao {
+public interface ISellerDao {
     void insert(Seller obj);
     void update(Seller obj);
     void deleteById(Integer id);
