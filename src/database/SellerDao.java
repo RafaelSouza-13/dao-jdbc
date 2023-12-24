@@ -50,17 +50,8 @@ public class SellerDao implements ISellerDao {
                 preparableStatement.setInt(1, id);
                 result = preparableStatement.executeQuery();
                 if(result.next()){
-                    Department department = new Department();
-                    Seller seller = new Seller();
-                    department.setId(result.getInt("DepartmentId"));
-                    department.setName(result.getString("Name"));
-
-                    seller.setId(result.getInt("Id"));
-                    seller.setName(result.getString("Name"));
-                    seller.setEmail(result.getString("Email"));
-                    seller.setBaseSalary(result.getDouble("BaseSalary"));
-                    seller.setBirthDate(result.getDate("BirthDate"));
-                    seller.setDepartment(department);
+                    Department department = instanciateDepartment(result);
+                    Seller seller = instanciateSeller(result, department);
                     return seller;
                 }
                 return null;
@@ -70,6 +61,24 @@ public class SellerDao implements ISellerDao {
             DB.closeStatement(preparableStatement);
             DB.closeResultSet(result);
         }
+    }
+
+    private Seller instanciateSeller(ResultSet result, Department department) throws SQLException{
+        Seller seller = new Seller();
+        seller.setId(result.getInt("Id"));
+        seller.setName(result.getString("Name"));
+        seller.setEmail(result.getString("Email"));
+        seller.setBaseSalary(result.getDouble("BaseSalary"));
+        seller.setBirthDate(result.getDate("BirthDate"));
+        seller.setDepartment(department);
+        return seller;
+    }
+
+    private Department instanciateDepartment(ResultSet result) throws SQLException{
+        Department department = new Department();
+        department.setId(result.getInt("DepartmentId"));
+        department.setName(result.getString("Name"));
+        return department;
     }
 
     @Override
