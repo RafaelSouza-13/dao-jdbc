@@ -27,5 +27,11 @@ public class App {
         Seller sellerNovo = new Seller(null, "Shreck", "pantano@email.com", new Date(), 3000.0, department);
         sellerDao.insert(sellerNovo);
         System.out.println("Novo vendedor de id: "+sellerNovo.getId());
+
+        System.out.println("-----Teste 5-----");
+        seller = sellerDao.findById(15);
+        seller.setName("Marta");
+        sellerDao.update(seller);
+        System.out.println("Atualização foi concluida: "+seller.getId());
     }
 }
