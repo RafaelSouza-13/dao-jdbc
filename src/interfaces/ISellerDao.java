@@ -1,6 +1,8 @@
 package interfaces;
 
 import java.util.List;
+
+import model.Department;
 import model.Seller;
 
 public interface ISellerDao {
@@ -9,4 +11,5 @@ public interface ISellerDao {
     void deleteById(Integer id);
     Seller findById(Integer id);
     List<Seller> findAll();
+    List<Seller> findByDepartment(Department department);
 }

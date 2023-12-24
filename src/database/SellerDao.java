@@ -4,7 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import error.DB;
 import error.DbException;
 import interfaces.ISellerDao;
@@ -85,6 +89,41 @@ public class SellerDao implements ISellerDao {
     public List<Seller> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    @Override
+    public List<Seller> findByDepartment(Department department) {
+        PreparedStatement preparableStatement = null;
+        ResultSet result = null;
+        try{
+            preparableStatement = connection.prepareStatement(
+                "SELECT seller.*,department.Name as DepName "
+                +"FROM seller INNER JOIN department "
+                +"ON seller.DepartmentId = department.Id "
+                +"WHERE DepartmentId = ? "
+                +"ORDER BY Name "
+                );
+                preparableStatement.setInt(1, department.getId());
+                result = preparableStatement.executeQuery();
+                List<Seller> list = new ArrayList<>();
+                Map<Integer, Department> map =  new HashMap<>();
+                while(result.next()){
+                    Department dep = map.get(result.getInt("DepartmentId"));
+                    if(dep == null){
+                        dep = instanciateDepartment(result);
+                        map.put(result.getInt("DepartmentId"), dep);
+                    }
+                    Seller seller = instanciateSeller(result, dep);
+                    list.add(seller);
+                    return list;
+                }
+                return null;
+        }catch(SQLException e){
+            throw new DbException(e.getMessage());
+        }finally{
+            DB.closeStatement(preparableStatement);
+            DB.closeResultSet(result);
+        }
     }
     
 }
