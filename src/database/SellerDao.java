@@ -83,8 +83,22 @@ public class SellerDao implements ISellerDao {
 
     @Override
     public void deleteById(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+        PreparedStatement preparedStatement = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                "DELETE FROM seller "
+                +"WHERE Id = ? "
+                );
+            preparedStatement.setInt(1, id);
+            int linhas = preparedStatement.executeUpdate();
+            if(linhas == 0){
+                throw new DbException("Não existe usuário com este id");
+            }
+        }catch(SQLException e){
+            throw new DbException(e.getMessage());
+        }finally{
+            DB.closeStatement(preparedStatement);
+        }
     }
 
     @Override

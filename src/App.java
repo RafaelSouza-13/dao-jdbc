@@ -33,5 +33,9 @@ public class App {
         seller.setName("Marta");
         sellerDao.update(seller);
         System.out.println("Atualização foi concluida: "+seller.getId());
+
+        System.out.println("-----Teste 6-----");
+        sellerDao.deleteById(15);
+        System.out.println("Deletado");
     }
 }
