@@ -10,10 +10,15 @@ public class App {
         Department department = new Department(2, null);
         SellerDao sellerDao = FactoreDao.createSellerDao();
         Seller seller  = sellerDao.findById(3);
-        List<Seller> list = sellerDao.findByDepartment(department);
         System.out.println("-----Teste 1-----");
         System.out.println(seller);
+        List<Seller> list = sellerDao.findByDepartment(department);
         System.out.println("-----Teste 2-----");
+        for(Seller s : list){
+            System.out.println(s);
+        }
+        list = sellerDao.findAll();
+        System.out.println("-----Teste 3-----");
         for(Seller s : list){
             System.out.println(s);
         }
