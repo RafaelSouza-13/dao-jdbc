@@ -1,3 +1,4 @@
+import java.util.Date;
 import java.util.List;
 
 import database.FactoreDao;
@@ -22,5 +23,9 @@ public class App {
         for(Seller s : list){
             System.out.println(s);
         }
+        System.out.println("-----Teste 4-----");
+        Seller sellerNovo = new Seller(null, "Shreck", "pantano@email.com", new Date(), 3000.0, department);
+        sellerDao.insert(sellerNovo);
+        System.out.println("Novo vendedor de id: "+sellerNovo.getId());
     }
 }

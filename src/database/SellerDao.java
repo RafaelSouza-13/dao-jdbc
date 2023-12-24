@@ -1,5 +1,6 @@
 package database;
 
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,8 +25,36 @@ public class SellerDao implements ISellerDao {
 
     @Override
     public void insert(Seller obj) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insert'");
+        PreparedStatement preparedStatement = null;
+        try{
+            preparedStatement = connection.prepareStatement(
+                "INSERT INTO seller "
+                +"(Name, Email, BirthDate, BaseSalary, DepartmentId) "
+                +"VALUES "
+                +"(?, ?, ?, ?, ?)", 
+                Statement.RETURN_GENERATED_KEYS
+                );
+            preparedStatement.setString(1, obj.getName());
+            preparedStatement.setString(2, obj.getEmail());
+            preparedStatement.setDate(3, new java.sql.Date(obj.getBirthDate().getTime()));
+            preparedStatement.setDouble(4, obj.getBaseSalary());
+            preparedStatement.setInt(5, obj.getDepartment().getId());
+            int rows = preparedStatement.executeUpdate();
+            if(rows > 0){
+                ResultSet result = preparedStatement.getGeneratedKeys();
+                if(result.next()){
+                    int id = result.getInt(1);
+                    obj.setId(id);
+                }
+                DB.closeResultSet(result);
+            }else{
+                throw new DbException("Erro inesperado! nenhuma linha foi afetada");
+            }
+        }catch(SQLException e){
+            throw new DbException(e.getMessage());
+        }finally{
+            DB.closeStatement(preparedStatement);
+        }
     }
 
     @Override
